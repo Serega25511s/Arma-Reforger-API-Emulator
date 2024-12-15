@@ -16,7 +16,7 @@ Emu Arma reforge API service
 ## Dependencies
 - [MongoDB](https://www.mongodb.com/try/download/community)
 - Windows 10/11 x64
-
+- Node JS 22
 ## Installation
 ```
 git clone https://github.com/Serega25511s/Arma-Reforger-API-Emulator.git
