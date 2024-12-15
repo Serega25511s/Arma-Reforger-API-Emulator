@@ -1,6 +1,6 @@
 # Arma-Reforger-API-Emulator
 Emu Arma reforge API service
-* [Support ME]()
+* [Support ME](#support-me)
 * [Installation](#installation)
 * [Dependencies](#dependencies)
 * [How to use](#how-to-use)
