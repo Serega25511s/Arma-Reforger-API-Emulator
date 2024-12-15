@@ -1,0 +1,6 @@
+{
+	"Server":{
+		"PORT": 12222,
+		"AuthKey": "KEY"
+	}
+}

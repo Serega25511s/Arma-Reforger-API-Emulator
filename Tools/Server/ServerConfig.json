@@ -1,0 +1,10 @@
+{
+	"Master":{
+		"URL": "http://127.0.0.1:6122"
+	},
+	"Server":{
+		"EnableProxy": false,
+		"ProxyAddr": "127.0.0.1:8888",
+		"VisibleInLicense": false
+	}
+}
