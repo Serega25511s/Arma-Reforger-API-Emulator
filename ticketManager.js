@@ -3,7 +3,7 @@ const config = require("./config.json");
 const axios = require("axios");
 let ticket = '';
 let token = '';
-let host = "127.0.0.1"
+let host = config.Workshop.IP
 let port = config.Workshop.PORT
 function setTicket(newTicket) {
     ticket = newTicket;
