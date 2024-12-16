@@ -13,6 +13,7 @@ Emu Arma reforge API service
 ## Support me
 - **BTC**: bc1q49z2c4r482kvtafkndd0hw3hjfpp57clh2l9dq
 - **USTD TRC20**: TCMSXb5H1EVU9GGFf45eMoebdCpiT9G9M3
+- **Boosty**: [donate](https://boosty.to/serega25511s/donate)
 ## Dependencies
 - [MongoDB](https://www.mongodb.com/try/download/community)
 - Windows 10/11 x64
