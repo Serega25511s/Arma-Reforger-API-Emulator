@@ -1,5 +1,6 @@
 {
   "API": {
+    "LOGGER": false,
     "PORT": 6122,
     "ActivateWorkshop": false
   },
