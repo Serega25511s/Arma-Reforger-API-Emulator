@@ -1,5 +1,5 @@
 # Arma-Reforger-API-Emulator
-Emu Arma reforge API service
+Emu Arma reforge API(Backend) service
 * [Support ME](#support-me)
 * [Installation](#installation)
 * [Dependencies](#dependencies)
