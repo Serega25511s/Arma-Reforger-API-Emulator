@@ -131,7 +131,6 @@ async function routes(fastify) {
                 "runtimeStats": {
                     "needRestart": false
                 },
-                "time": currentDate,
                 "sessionId": "20240411131235-0000207476a1"
             }
         }

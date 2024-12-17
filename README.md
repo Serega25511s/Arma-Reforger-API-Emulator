@@ -38,7 +38,7 @@ npm install package.json
 {
   "Server":{
     "PORT": 12222, # Workshop server port
-    "AuthKey": "KEY" # authKey for auth get token request
+    "AuthKey": "KEY" # authKey for auth get token request(You need to set the same values for the API and the server)
   }
 }
 ```
