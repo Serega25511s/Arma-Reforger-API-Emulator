@@ -1,6 +1,7 @@
 const {Servers} = require("../db");
 const axios = require("axios");
-
+const { v4: uuidv4 } = require('uuid');
+const jwt = require('jsonwebtoken');
 function makeid(length, onlyNumbers) {
     let result           = '';
     let characters = ""
@@ -22,7 +23,10 @@ function makeid(length, onlyNumbers) {
 async function routes(fastify) {
     fastify.post("/game-api/s2s-api/v1.0/lobby/dedicatedServers/registerUnmanagedServer", async (request, reply)=>{
         let body = request.body
-        let serverID = makeid(32, true);
+
+        const decoded = jwt.decode(body.accessToken);
+        let serverID = decoded.serverId;
+
         let data = {
             "dsConfig":{
                 "providerServerId": serverID,

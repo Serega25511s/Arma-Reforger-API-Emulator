@@ -9,7 +9,7 @@ async function routes(fastify) {
         // Проверяем наличие сервера в MongoDB
         let server = await Servers.findOne({ "data.id": serverID });
         if (!server) {
-            return reply.send({ status: "NotFound Server" });
+            return reply.code(404).send({ status: "NotFound Server" });
         }
 
         if (server.data.isLicense) {
