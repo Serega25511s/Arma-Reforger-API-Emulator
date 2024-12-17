@@ -1,36 +1,34 @@
 const {Servers} = require("../db");
 const axios = require("axios");
 const jwt = require('jsonwebtoken');
-function makeid(length, onlyNumbers) {
-    let result           = '';
-    let characters = ""
-    if (onlyNumbers === true)
-    {
-        characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    }else{
-        characters = '0123456789';
-    }
+const { v4: uuidv4 } = require('uuid');
 
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() *
-            charactersLength));
-    }
-    return result;
-}
-
+const secretKey = 'my_secret_key';
 async function routes(fastify) {
 
     fastify.post("/game-api/s2s-api/v1.0/lobby/dedicatedServers/registerUnmanagedServer", async (request, reply)=>{
-        let body = request.body
+        let body = request.body;
+        let serverID;
+        let jwtToken = body.accessToken;
 
-        const decoded = jwt.decode(body.accessToken);
-        let serverID = decoded.serverId;
+        if(!jwtToken){
+            const header = {
+                "x-client-id": request.headers["x-client-id"],
+                "x-client-secret": request.headers["x-client-secret"],
+                "content-type": request.headers["content-type"]
+            };
 
+            let bohemiaRegister = await axios.post("https://api-ar-game.bistudio.com/game-api/s2s-api/v1.0/lobby/dedicatedServers/registerUnmanagedServer", body, { headers: header });
+            jwtToken = bohemiaRegister.data.ownerToken;
+        }
+        const decoded = jwt.decode(jwtToken);
+
+        serverID = decoded.serverId;
+        let hostServerId = uuidv4();
         let data = {
             "dsConfig":{
                 "providerServerId": serverID,
-                "dedicatedServerId":serverID,
+                "dedicatedServerId": hostServerId,
                 "region": "",
                 "game": {
                     "name": body["name"],
@@ -49,10 +47,10 @@ async function routes(fastify) {
                     "gameMode": body["gameMode"]
                 }
             },
-            "ownerToken":body["accessToken"]
+            "ownerToken":body.accessToken ? body.accessToken : jwtToken,
         }
         await Servers.updateOne(
-            { serverID: serverID },
+            { serverID: hostServerId },
             {
                 $set: { data: {}},
                 $currentDate: { lastUpdate: true }
@@ -64,6 +62,9 @@ async function routes(fastify) {
     fastify.post("/game-api/s2s-api/v1.0/lobby/rooms/register", async (request, reply)=>{
         let body = request.body;
         let serverID = body["dedicatedHostId"];
+
+        const decoded = jwt.decode(body.accessToken);
+        let hostServerID = decoded.serverId;
 
         // Проверяем наличие сервера в MongoDB
         let server = await Servers.findOne({ serverID: serverID });
@@ -79,7 +80,6 @@ async function routes(fastify) {
             let bohemiaAuth = await axios.post("https://api-ar-game.bistudio.com/game-api/s2s-api/v1.0/lobby/rooms/register", body, { headers: header });
 
             bohemiaAuth.data["mpRoom"]["time"] = currentDate;
-            bohemiaAuth.data["mpRoom"]["id"] = serverID;
             bohemiaAuth.data["mpRoom"]["isLicense"] = true;
             bohemiaAuth.data["mpRoom"]["official"] = true;
 
@@ -114,14 +114,14 @@ async function routes(fastify) {
                 "created": 1712841158268,
                 "updated": 1712841158268,
                 "hostAddress": body["hostAddress"],
-                "hostUserId": "817ecbf6-7b28-4465-a781-d56891862653",
+                "hostUserId": body["dedicatedHostId"],
                 "playerCountLimit": body["playerCountLimit"],
                 "playerCount": 0,
                 "autoJoinable": body["autoJoinable"],
                 "directJoinCode": "0622875052",
                 "supportedGameClientTypes": ["PLATFORM_PC", "PLATFORM_XBL"],
                 "dsLaunchTimestamp": 1712841157982,
-                "dsProviderServerId": "2f211937-ed4e-4c5f-bbf1-e6451d736e38",
+                "dsProviderServerId": hostServerID,
                 "mods": body["mods"],
                 "battlEye": false,
                 "favorite": false,
