@@ -1,6 +1,5 @@
 const {Servers} = require("../db");
 const axios = require("axios");
-const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 function makeid(length, onlyNumbers) {
     let result           = '';
@@ -21,6 +20,7 @@ function makeid(length, onlyNumbers) {
 }
 
 async function routes(fastify) {
+
     fastify.post("/game-api/s2s-api/v1.0/lobby/dedicatedServers/registerUnmanagedServer", async (request, reply)=>{
         let body = request.body
 
@@ -143,6 +143,16 @@ async function routes(fastify) {
             { upsert: true }
         );
         return reply.send(data);
+    })
+    fastify.post("/game-api/s2s-api/v1.0/lobby/rooms/remove", async (request, reply)=>{
+        let body = request.body;
+        let serverID = body["dedicatedServerId"];
+        let server = await Servers.findOne({ serverID: serverID });
+        if(!server){
+            return reply.code(404).send({status: "server not found"});
+        }
+        await Servers.deleteOne({ serverID: serverID });
+        return reply.send({status: "OK"});
     })
 }
 module.exports = routes;
