@@ -7,7 +7,7 @@ async function routes(fastify) {
         let serverID = request.body["id"];
 
         // Проверяем наличие сервера в MongoDB
-        let server = await Servers.findOne({ "data.id": serverID });
+        let server = await Servers.findOne({ serverID: serverID });
         if (!server) {
             return reply.code(404).send({ status: "NotFound Server" });
         }
@@ -24,7 +24,7 @@ async function routes(fastify) {
 
         let players = request.body["players"];
         await Servers.updateOne(
-            { "data.id": serverID },
+            { serverID: serverID },
             {
                 $set: {
                     "data.playerCount": players.length

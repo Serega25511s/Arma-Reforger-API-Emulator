@@ -33,7 +33,6 @@ async function routes(fastify) {
 
             // Проверяем наличие пользователя в MongoDB по sessionTicket
             const user = await Users.findOne({ "ticket": body["sessionTicket"] });
-            console.log(user);
             if (!user) {
                 const header = {
                     "x-client-id": request.headers["x-client-id"],

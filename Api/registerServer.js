@@ -96,9 +96,9 @@ async function routes(fastify) {
             return reply.send(bohemiaAuth.data);
         }
         let data = {
-            "roomId": `${serverID}`,
+            "roomId": `${hostServerID}`,
             "mpRoom": {
-                "id": `${serverID}`,
+                "id": `${hostServerID}`,
                 "scenarioId": body["scenarioId"],
                 "name": body["name"],
                 "scenarioVersion": "",
